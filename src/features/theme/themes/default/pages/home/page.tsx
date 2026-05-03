@@ -14,6 +14,7 @@ import { PostItem } from "@/features/theme/themes/default/components/post-item";
 import { m } from "@/paraglide/messages";
 
 const BILIBILI_ROOM_ID = "3893221";
+const BILIBILI_LIVE_URL = `https://live.bilibili.com/${BILIBILI_ROOM_ID}`;
 const AVATAR_URL =
   "https://i.stardots.io/784774835/StarDots-2026042803043780937.png";
 
@@ -79,7 +80,7 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
           </div>
 
           <a
-            href={liveStatus.url}
+            href={liveStatus.url || BILIBILI_LIVE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-2.5 px-5 py-1.5 rounded-full text-sm font-bold transition-all duration-300 hover:scale-105"
