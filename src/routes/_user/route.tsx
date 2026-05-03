@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import theme from "@theme";
+import { Home, FileText, Link as LinkIcon } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { ErrorPage } from "@/components/common/error-page";
@@ -29,12 +30,13 @@ function UserLayout() {
   const queryClient = useQueryClient();
 
   const navOptions = [
-    { label: m.nav_home(), to: "/" as const, id: "home" },
-    { label: m.nav_posts(), to: "/posts" as const, id: "posts" },
+    { label: m.nav_home(), to: "/" as const, id: "home", icon: Home },
+    { label: m.nav_posts(), to: "/posts" as const, id: "posts", icon: FileText },
     {
       label: m.nav_friend_links(),
       to: "/friend-links" as const,
       id: "friend-links",
+      icon: LinkIcon,
     },
   ];
 

@@ -1,17 +1,26 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
-import { Terminal } from "lucide-react";
+import { Monitor, Terminal } from "lucide-react";
 import { useMemo } from "react";
+import { useBilibiliLive } from "@/features/bilibili-live/hooks/use-bilibili-live";
 import {
   resolveSocialHref,
   SOCIAL_PLATFORMS,
 } from "@/features/config/utils/social-platforms";
 import { useViewCounts } from "@/features/pageview/queries";
 import type { HomePageProps } from "@/features/theme/contract/pages";
+import { BlurFade } from "@/features/theme/themes/default/components/blur-fade";
+import { PixelatedCanvas } from "@/features/theme/themes/default/components/pixelated-canvas";
 import { PostItem } from "@/features/theme/themes/default/components/post-item";
 import { m } from "@/paraglide/messages";
 
+const BILIBILI_ROOM_ID = "3893221";
+const AVATAR_URL =
+  "https://i.stardots.io/784774835/StarDots-2026042803043780937.png";
+
 export function HomePage({ posts, pinnedPosts }: HomePageProps) {
   const { siteConfig } = useRouteContext({ from: "__root__" });
+
+  const liveStatus = useBilibiliLive(BILIBILI_ROOM_ID);
 
   const displayPosts = useMemo(() => {
     const pinned = (pinnedPosts ?? []).map((p) => ({ ...p, isPinned: true }));
@@ -35,28 +44,66 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
     useViewCounts(allSlugs);
 
   return (
-    <div className="flex flex-col w-full max-w-3xl mx-auto px-6 md:px-0 py-12 md:py-20 space-y-20">
-      {/* Intro Section */}
-      <section className="space-y-8">
-        <header className="space-y-6">
-          <h1 className="text-4xl md:text-5xl font-serif font-medium tracking-tight text-foreground flex items-center gap-4">
-            {m.home_greeting()}{" "}
-            <span className="animate-wave origin-[70%_70%]">👋</span>
-          </h1>
-
-          <div className="space-y-4 max-w-2xl text-base md:text-lg text-muted-foreground font-light leading-relaxed">
-            <p>
-              {m.home_intro_prefix()}{" "}
-              <span className="text-foreground font-medium">
-                {siteConfig.author}
-              </span>
-              {m.home_intro_separator()}
-              {siteConfig.description}
-            </p>
+    <div className="flex flex-col w-full max-w-3xl mx-auto px-6 md:px-0 py-4 md:py-8">
+      <BlurFade
+        direction="down"
+        delay={0}
+        duration={0.6}
+        className="flex flex-col items-center gap-6 pt-0 pb-0"
+      >
+        <div className="relative">
+          <div
+            className="relative rounded-full border-4 p-1 transition-colors duration-300"
+            style={{
+              borderColor: liveStatus.isLive
+                ? "#FF6B9D"
+                : "hsl(var(--color-default-300))",
+            }}
+          >
+            <PixelatedCanvas
+              src={AVATAR_URL}
+              width={260}
+              height={260}
+              cellSize={5}
+              dotScale={0.85}
+              shape="circle"
+              interactive={true}
+              distortionMode="swirl"
+              distortionStrength={4}
+              distortionRadius={80}
+              fadeOnLeave={true}
+              maxFps={60}
+              dropoutStrength={0.05}
+              className="rounded-full"
+            />
           </div>
-        </header>
 
-        <div className="flex items-center gap-6 text-muted-foreground">
+          <a
+            href={liveStatus.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-2.5 px-5 py-1.5 rounded-full text-sm font-bold transition-all duration-300 hover:scale-105"
+            style={{
+              background: liveStatus.isLive
+                ? "linear-gradient(135deg, #FF6B9D 0%, #FF4757 100%)"
+                : "rgba(156, 163, 175, 0.8)",
+              color: liveStatus.isLive
+                ? "white"
+                : "hsl(var(--color-default-700))",
+              boxShadow: liveStatus.isLive
+                ? "0 4px 12px rgba(255, 107, 157, 0.4)"
+                : "none",
+            }}
+          >
+            <Monitor
+              size={16}
+              className={liveStatus.isLive ? "fill-white" : ""}
+            />
+            {liveStatus.isLive ? "正在直播" : "未开播"}
+          </a>
+        </div>
+
+        <div className="flex items-center gap-5">
           {siteConfig.social
             .filter((link) => link.url)
             .map((link, i) => {
@@ -74,11 +121,11 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
                   href={href}
                   target={link.platform === "email" ? undefined : "_blank"}
                   rel={link.platform === "email" ? undefined : "noreferrer"}
-                  className="hover:text-foreground transition-colors"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
                   aria-label={label}
                 >
                   {Icon ? (
-                    <Icon size={20} strokeWidth={1.5} />
+                    <Icon size={18} strokeWidth={1.5} />
                   ) : (
                     <img src={link.icon} alt={label} className="w-5 h-5" />
                   )}
@@ -86,10 +133,31 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
               );
             })}
         </div>
-      </section>
+      </BlurFade>
 
-      {/* Selected Posts */}
-      <section className="space-y-10">
+      <div className="flex justify-center pt-4 pb-0">
+        <BlurFade
+          direction="down"
+          delay={0.2}
+          duration={0.6}
+          className="flex flex-col items-center text-center gap-2 max-w-2xl"
+        >
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">
+              {siteConfig.author}
+            </h1>
+            <p className="text-base text-muted-foreground mt-1">
+              {siteConfig.title}
+            </p>
+          </div>
+
+          <p className="text-muted-foreground leading-relaxed text-base">
+            {siteConfig.description}
+          </p>
+        </BlurFade>
+      </div>
+
+      <section className="space-y-10 mt-8">
         <h2 className="text-xl font-serif font-medium text-foreground tracking-tight flex items-center gap-2">
           {m.home_latest_posts()}
         </h2>

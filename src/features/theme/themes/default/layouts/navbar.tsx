@@ -49,32 +49,38 @@ export function Navbar({
 
           {/* Center: Main Nav */}
           <nav className="hidden lg:flex items-center gap-8">
-            {navOptions.map((option) => (
-              <Link
-                key={option.id}
-                to={option.to}
-                className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground/60 hover:text-foreground transition-colors"
-                activeProps={{
-                  className: "!text-foreground",
-                }}
-              >
-                {option.label}
-              </Link>
-            ))}
+            {navOptions.map((option) => {
+              const IconComponent = option.icon;
+              return (
+                <Link
+                  key={option.id}
+                  to={option.to}
+                  className="flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-muted-foreground/60 hover:text-foreground transition-colors"
+                  activeProps={{
+                    className: "!text-foreground",
+                  }}
+                >
+                  {IconComponent && (
+                    <IconComponent size={20} strokeWidth={1.5} />
+                  )}
+                  {option.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <div className="flex items-center gap-1">
-              <ThemeToggle />
-              <LanguageSwitcher className="text-muted-foreground hover:text-foreground h-8 w-8" />
+              <ThemeToggle className="p-2" />
+              <LanguageSwitcher className="text-muted-foreground hover:text-foreground h-9 w-9" />
               <Link
                 to="/search"
-                className="text-muted-foreground hover:text-foreground h-8 w-8 flex items-center justify-center transition-colors"
+                className="text-muted-foreground hover:text-foreground h-9 w-9 flex items-center justify-center transition-colors"
                 aria-label={m.nav_search()}
               >
                 <Search
-                  size={16}
+                  size={20}
                   strokeWidth={1.5}
                   style={{ viewTransitionName: "search-input" }}
                 />
@@ -85,14 +91,14 @@ export function Navbar({
             <div className="flex items-center gap-3 pl-3">
               <div className="hidden md:flex items-center">
                 {isLoading ? (
-                  <Skeleton className="w-8 h-8 rounded-full" />
+                  <Skeleton className="w-9 h-9 rounded-full" />
                 ) : (
                   <div className="flex items-center gap-3 animate-in fade-in">
                     {user ? (
                       <>
                         <Link
                           to="/profile"
-                          className="w-7 h-7 rounded-full overflow-hidden ring-1 ring-border hover:ring-foreground transition-all relative z-10"
+                          className="w-9 h-9 rounded-full overflow-hidden ring-1 ring-border hover:ring-foreground transition-all relative z-10"
                           style={{ viewTransitionName: "user-avatar" }}
                         >
                           {user.image ? (
@@ -104,7 +110,7 @@ export function Navbar({
                           ) : (
                             <div className="w-full h-full bg-muted flex items-center justify-center">
                               <UserIcon
-                                size={12}
+                                size={16}
                                 className="text-muted-foreground"
                               />
                             </div>
@@ -114,7 +120,7 @@ export function Navbar({
                     ) : (
                       <Link
                         to="/login"
-                        className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-sm uppercase tracking-widest font-bold text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {m.nav_login()}
                       </Link>

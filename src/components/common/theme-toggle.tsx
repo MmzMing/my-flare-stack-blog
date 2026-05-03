@@ -80,20 +80,20 @@ export function ThemeToggle({ className }: { className?: string }) {
       title={m.theme_toggle_title({ theme: themeLabel })}
       aria-label={m.theme_toggle_title({ theme: themeLabel })}
     >
-      <div className="relative flex items-center justify-center w-4 h-4">
+      <div className="relative flex items-center justify-center w-5 h-5">
         {/* Light Mode Icon */}
         <span className="hidden [.light:not(.system)_&]:block">
-          <Sun size={14} strokeWidth={1.5} />
+          <Sun size={18} strokeWidth={1.5} />
         </span>
 
         {/* Dark Mode Icon */}
         <span className="hidden [.dark:not(.system)_&]:block">
-          <Moon size={14} strokeWidth={1.5} />
+          <Moon size={18} strokeWidth={1.5} />
         </span>
 
         {/* System Mode Icon */}
         <span className="hidden in-[.system]:block">
-          <Monitor size={14} strokeWidth={1.5} />
+          <Monitor size={18} strokeWidth={1.5} />
         </span>
       </div>
     </button>

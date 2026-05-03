@@ -19,6 +19,9 @@ const getStoredUserTheme = createIsomorphicFn()
     return UserThemeSchema.parse(stored);
   });
 
+// Get initial theme synchronously for SSR consistency
+const getInitialTheme = () => "system" as UserTheme;
+
 const setStoredTheme = createClientOnlyFn((theme: UserTheme) => {
   const validatedTheme = UserThemeSchema.parse(theme);
   localStorage.setItem(themeStorageKey, validatedTheme);
@@ -92,7 +95,14 @@ interface ThemeProviderProps {
   children: ReactNode;
 }
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [userTheme, setUserTheme] = useState<UserTheme>(getStoredUserTheme);
+  const [userTheme, setUserTheme] = useState<UserTheme>(getInitialTheme);
+
+  // Sync with localStorage after hydration
+  useEffect(() => {
+    const storedTheme = getStoredUserTheme();
+    setUserTheme(storedTheme);
+    handleThemeChange(storedTheme);
+  }, []);
 
   useEffect(() => {
     if (userTheme !== "system") return;

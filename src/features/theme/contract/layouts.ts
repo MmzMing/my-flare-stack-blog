@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import type { FileRoutesByTo } from "@/routeTree.gen";
 
 /**
@@ -8,6 +9,7 @@ export interface NavOption {
   label: string;
   to: keyof FileRoutesByTo;
   id: string;
+  icon?: LucideIcon;
 }
 
 export interface UserInfo {
