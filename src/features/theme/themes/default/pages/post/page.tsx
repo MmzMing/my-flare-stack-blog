@@ -31,18 +31,18 @@ export function PostPage({ post }: PostPageProps) {
       <nav className="py-12 flex items-center justify-between">
         <button
           onClick={() => navigate({ to: "/posts" })}
-          className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity"
+          className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity"
         >
-          <ArrowLeft size={12} />
+          <ArrowLeft size={20} />
           <span>{m.post_back_to_list()}</span>
         </button>
         {session?.user.role === "admin" && (
           <Link
             to="/admin/posts/edit/$id"
             params={{ id: String(post.id) }}
-            className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity"
+            className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity"
           >
-            <Pencil size={12} />
+            <Pencil size={20} />
             <span>{m.post_edit()}</span>
           </Link>
         )}

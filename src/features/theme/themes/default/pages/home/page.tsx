@@ -16,7 +16,7 @@ import { m } from "@/paraglide/messages";
 const BILIBILI_ROOM_ID = "3893221";
 const BILIBILI_LIVE_URL = `https://live.bilibili.com/${BILIBILI_ROOM_ID}`;
 const AVATAR_URL =
-  "https://i.stardots.io/784774835/StarDots-2026042803043780937.png";
+  "https://i.stardots.io/784774835/StarDots-2026050515272984592.webp";
 
 export function HomePage({ posts, pinnedPosts }: HomePageProps) {
   const { siteConfig } = useRouteContext({ from: "__root__" });
