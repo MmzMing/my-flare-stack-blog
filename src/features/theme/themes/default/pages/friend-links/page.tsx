@@ -6,7 +6,7 @@ import { FriendLinkCard } from "./friend-link-card";
 
 export function FriendLinksPage({ links }: FriendLinksPageProps) {
   return (
-    <div className="w-full max-w-3xl mx-auto pb-20 px-6 md:px-0">
+    <div className="w-full max-w-5xl mx-auto pb-20 px-6 md:px-0">
       {/* Header */}
       <header className="py-12 md:py-20 space-y-6">
         <h1 className="text-4xl md:text-5xl font-serif font-medium tracking-tight text-foreground">
@@ -17,7 +17,7 @@ export function FriendLinksPage({ links }: FriendLinksPageProps) {
         </p>
       </header>
 
-      {/* Links List */}
+      {/* Links Grid */}
       <div className="min-h-50">
         {links.length === 0 ? (
           <div className="py-20 text-center">
@@ -29,7 +29,7 @@ export function FriendLinksPage({ links }: FriendLinksPageProps) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {links.map((link) => (
               <FriendLinkCard key={link.id} link={link} />
             ))}

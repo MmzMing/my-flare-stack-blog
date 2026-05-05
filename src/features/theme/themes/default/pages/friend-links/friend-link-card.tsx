@@ -1,56 +1,61 @@
+import { Globe } from "lucide-react";
 import type { FriendLinkWithUser } from "@/features/friend-links/friend-links.schema";
+import { m } from "@/paraglide/messages";
+import { PinContainer } from "@/components/ui/3d-pin";
 
 interface FriendLinkCardProps {
   link: Omit<FriendLinkWithUser, "createdAt" | "updatedAt">;
 }
 
 export function FriendLinkCard({ link }: FriendLinkCardProps) {
-  // Extract domain for display
-  const displayUrl = link.siteUrl
-    .replace(/^https?:\/\//, "")
-    .replace(/\/$/, "");
+  const avatarUrl = link.logoUrl;
+  const description = link.description || m.friend_links_unknown_site();
 
   return (
-    <a
-      href={link.siteUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-start gap-4 p-4 rounded-lg hover:bg-muted/40 transition-colors border border-transparent hover:border-border/40"
-    >
-      {/* Logo */}
-      <div className="shrink-0 w-10 h-10 rounded-md bg-muted/30 border border-border/40 flex items-center justify-center overflow-hidden">
-        {link.logoUrl ? (
-          <img
-            src={link.logoUrl}
-            alt={link.siteName}
-            className="w-full h-full object-cover transition-all duration-300"
-            loading="lazy"
-          />
-        ) : (
-          <span className="text-sm font-serif font-medium text-muted-foreground/60">
-            {link.siteName.slice(0, 1)}
-          </span>
-        )}
-      </div>
+    <div className="h-[20rem] w-full flex items-center justify-center">
+      <PinContainer
+        title={link.siteUrl}
+        href={link.siteUrl}
+        className="w-[16rem] sm:w-[18rem]"
+        containerClassName="w-full h-full"
+      >
+        <div className="flex h-full w-full basis-full flex-col p-4 tracking-tight text-slate-100/50">
+          <div className="flex items-center gap-3 mb-3">
+            {/* Avatar Area */}
+            <div className="shrink-0 relative w-12 h-12 rounded-xl overflow-hidden bg-white/5 flex items-center justify-center border border-white/10">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={link.siteName}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                    e.currentTarget.parentElement?.classList.add("!bg-white/10");
+                  }}
+                />
+              ) : (
+                <Globe className="w-6 h-6 opacity-40 text-slate-300" />
+              )}
+            </div>
 
-      <div className="flex-1 min-w-0 space-y-1">
-        <div className="flex items-center justify-between gap-2">
-          <h3 className="font-medium text-foreground tracking-tight truncate group-hover:underline decoration-border/60 underline-offset-4 decoration-1">
-            {link.siteName}
-          </h3>
-          <span className="text-[10px] font-mono text-muted-foreground/30 hidden sm:block truncate shrink-0">
-            {displayUrl}
-          </span>
-        </div>
+            {/* Site Name */}
+            <h3 className="!m-0 text-base font-bold text-slate-100 truncate">
+              {link.siteName}
+            </h3>
+          </div>
 
-        <div className="min-h-[2.5em]">
-          {link.description ? (
-            <p className="text-sm text-muted-foreground/80 leading-relaxed line-clamp-2">
-              {link.description}
-            </p>
-          ) : null}
+          {/* Description */}
+          <div className="!m-0 !p-0 text-sm font-normal">
+            <span className="text-slate-400 line-clamp-2 leading-relaxed">
+              {description}
+            </span>
+          </div>
+
+          {/* Gradient Placeholder */}
+          <div className="mt-4 flex w-full flex-1 rounded-lg bg-gradient-to-br from-violet-500/30 via-purple-500/30 to-blue-500/30 border border-white/5" />
         </div>
-      </div>
-    </a>
+      </PinContainer>
+    </div>
   );
 }
